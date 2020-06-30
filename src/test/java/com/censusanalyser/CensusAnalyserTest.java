@@ -13,12 +13,13 @@ public class CensusAnalyserTest {
     private static final String WRONG_INDIA_CENSUS_CSV_FILE_PATH = "./src/main/resources/IndiaStateCensusData.csv";
     private static final String WRONG_INDIA_CENSUS_FILE_TYPE = "IndiaStateCensusData.txt";
     private static final String WRONG_INDIA_CENSUS_DELIMITER_FILE = "IndiaStateCensusDataWrongDelimiter.csv";
-    private static final String WRONG_HEADER_FILE = "IndiaStateCensusDataWrongHeader.csv";
+    private static final String WRONG_INDIA_CENSUS_HEADER_FILE = "IndiaStateCensusDataWrongHeader.csv";
 
     private static final String INDIA_STATE_CODE_CSV_FILE_PATH = "IndiaStateCode.csv";
     private static final String WRONG_STATE_CODE_CSV_FILE_PATH = "./src/main/resources/IndiaStateCode.csv";
     private static final String WRONG_STATE_CODE_FILE_TYPE = "IndiaStateCode.txt";
     private static final String WRONG_STATE_CODE_DELIMITER_FILE="IndiaStateCodeWrongDelimiter.csv";
+    private static final String WRONG_STATE_CODE_HEADER_FILE="IndiaStateCodeWrongHeader.csv";
 
     //TC-1.1
     @Test
@@ -75,7 +76,7 @@ public class CensusAnalyserTest {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             ExpectedException expectedException = ExpectedException.none();
             expectedException.expect(CensusAnalyserException.class);
-            censusAnalyser.loadIndiaCensusData(WRONG_HEADER_FILE);
+            censusAnalyser.loadIndiaCensusData(WRONG_INDIA_CENSUS_HEADER_FILE);
         } catch (CensusAnalyserException e) {
             System.out.println(e.getMessage());
         }
@@ -124,6 +125,19 @@ public class CensusAnalyserTest {
             ExpectedException expectedException = ExpectedException.none();
             expectedException.expect(CensusAnalyserException.class);
             stateAnalyser.loadIndiaStateData(WRONG_STATE_CODE_DELIMITER_FILE);
+        } catch (CensusAnalyserException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    //1.5
+    @Test
+    public void givenIndiaStateCodeCSVFile_WithWrongHeader_ShouldThrowException() {
+        try {
+            StateAnalyser stateAnalyser=new StateAnalyser();
+            ExpectedException expectedException = ExpectedException.none();
+            expectedException.expect(CensusAnalyserException.class);
+            stateAnalyser.loadIndiaStateData(WRONG_STATE_CODE_HEADER_FILE);
         } catch (CensusAnalyserException e) {
             System.out.println(e.getMessage());
         }
