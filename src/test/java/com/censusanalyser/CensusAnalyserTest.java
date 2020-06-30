@@ -11,12 +11,13 @@ public class CensusAnalyserTest {
 
     private static final String INDIA_CENSUS_CSV_FILE_PATH = "IndiaStateCensusData.csv";
     private static final String WRONG_INDIA_CENSUS_CSV_FILE_PATH = "./src/main/resources/IndiaStateCensusData.csv";
-    private static final String WRONG_FILE_TYPE = "IndiaStateCensusData.txt";
+    private static final String WRONG_INDIA_CENSUS_FILE_TYPE = "IndiaStateCensusData.txt";
     private static final String WRONG_DELIMITER_FILE = "IndiaStateCensusDataWrongDelimiter.csv";
     private static final String WRONG_HEADER_FILE = "IndiaStateCensusDataWrongHeader.csv";
 
     private static final String INDIA_STATE_CODE_CSV_FILE_PATH = "IndiaStateCode.csv";
-    private static final String WRONG_STATE_CODE_CSV_FILE_PATH="./src/main/resources/IndiaStateCode.csv";
+    private static final String WRONG_STATE_CODE_CSV_FILE_PATH = "./src/main/resources/IndiaStateCode.csv";
+    private static final String WRONG_STATE_CODE_FILE_TYPE = "IndiaStateCode.txt";
 
     //TC-1.1
     @Test
@@ -47,9 +48,9 @@ public class CensusAnalyserTest {
     public void givenIndiaCensusData_WithWrongType_ShouldThrowException() {
         try {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
-            censusAnalyser.loadIndiaCensusData(WRONG_FILE_TYPE);
+            censusAnalyser.loadIndiaCensusData(WRONG_INDIA_CENSUS_FILE_TYPE);
         } catch (CensusAnalyserException e) {
-            Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
+            System.out.println(e.getMessage());
         }
     }
 
@@ -100,6 +101,17 @@ public class CensusAnalyserTest {
             stateAnalyser.loadIndiaStateData(WRONG_STATE_CODE_CSV_FILE_PATH);
         } catch (CensusAnalyserException e) {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
+        }
+    }
+
+    //TC-2.3
+    @Test
+    public void givenIndiaStateCodeCSVFile_WithWrongType_ShouldThrowException() {
+        try {
+            StateAnalyser stateAnalyser = new StateAnalyser();
+            stateAnalyser.loadIndiaStateData(WRONG_STATE_CODE_FILE_TYPE);
+        } catch (CensusAnalyserException e) {
+            System.out.println(e.getMessage());
         }
     }
 }
