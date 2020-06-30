@@ -1,13 +1,12 @@
 package com.censusanalyser;
 
 import com.censusanalyser.exception.CensusAnalyserException;
-import com.censusanalyser.service.CensusAnalyser;
-import com.censusanalyser.service.StateAnalyser;
+import com.censusanalyser.service.CensusAndStateCodeAnalyser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-public class CensusAnalyserTest {
+public class CensusAndStateCodeAnalyserTest {
 
     private static final String INDIA_CENSUS_CSV_FILE_PATH = "IndiaStateCensusData.csv";
     private static final String WRONG_INDIA_CENSUS_CSV_FILE_PATH = "./src/main/resources/IndiaStateCensusData.csv";
@@ -25,7 +24,7 @@ public class CensusAnalyserTest {
     @Test
     public void givenIndianCensusCSVFile_ReturnsCorrectRecords() {
         try {
-            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            CensusAndStateCodeAnalyser censusAnalyser = new CensusAndStateCodeAnalyser();
             int numOfRecords = censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
             Assert.assertEquals(29, numOfRecords);
         } catch (CensusAnalyserException e) {
@@ -36,7 +35,7 @@ public class CensusAnalyserTest {
     @Test
     public void givenIndiaCensusData_WithWrongFile_ShouldThrowException() {
         try {
-            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            CensusAndStateCodeAnalyser censusAnalyser = new CensusAndStateCodeAnalyser();
             ExpectedException exceptionRule = ExpectedException.none();
             exceptionRule.expect(CensusAnalyserException.class);
             censusAnalyser.loadIndiaCensusData(WRONG_INDIA_CENSUS_CSV_FILE_PATH);
@@ -49,7 +48,7 @@ public class CensusAnalyserTest {
     @Test
     public void givenIndiaCensusData_WithWrongType_ShouldThrowException() {
         try {
-            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            CensusAndStateCodeAnalyser censusAnalyser = new CensusAndStateCodeAnalyser();
             censusAnalyser.loadIndiaCensusData(WRONG_INDIA_CENSUS_FILE_TYPE);
         } catch (CensusAnalyserException e) {
             System.out.println(e.getMessage());
@@ -60,7 +59,7 @@ public class CensusAnalyserTest {
     @Test
     public void givenIndiaCensusData_WithWrongDelimiterFile_ShouldThrowException() {
         try {
-            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            CensusAndStateCodeAnalyser censusAnalyser = new CensusAndStateCodeAnalyser();
             ExpectedException expectedException = ExpectedException.none();
             expectedException.expect(CensusAnalyserException.class);
             censusAnalyser.loadIndiaCensusData(WRONG_INDIA_CENSUS_DELIMITER_FILE);
@@ -73,7 +72,7 @@ public class CensusAnalyserTest {
     @Test
     public void givenIndiaCensusData_WithWrongHeader_ShouldThrowException() {
         try {
-            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            CensusAndStateCodeAnalyser censusAnalyser = new CensusAndStateCodeAnalyser();
             ExpectedException expectedException = ExpectedException.none();
             expectedException.expect(CensusAnalyserException.class);
             censusAnalyser.loadIndiaCensusData(WRONG_INDIA_CENSUS_HEADER_FILE);
@@ -86,8 +85,8 @@ public class CensusAnalyserTest {
     @Test
     public void givenIndianStateCodeCSVFile_ReturnsCorrectRecords() {
         try {
-            StateAnalyser stateAnalyser = new StateAnalyser();
-            int numOfRecords = stateAnalyser.loadIndiaStateCode(INDIA_STATE_CODE_CSV_FILE_PATH);
+            CensusAndStateCodeAnalyser censusAndStateCodeAnalyser = new CensusAndStateCodeAnalyser();
+            int numOfRecords = censusAndStateCodeAnalyser.loadIndiaStateCode(INDIA_STATE_CODE_CSV_FILE_PATH);
             Assert.assertEquals(37, numOfRecords);
         } catch (CensusAnalyserException e) {
         }
@@ -97,10 +96,10 @@ public class CensusAnalyserTest {
     @Test
     public void givenIndiaStateCodeCSVFile_WithWrongFile_ShouldThrowException() {
         try {
-            StateAnalyser stateAnalyser = new StateAnalyser();
+            CensusAndStateCodeAnalyser censusAndStateCodeAnalyser = new CensusAndStateCodeAnalyser();
             ExpectedException exceptionRule = ExpectedException.none();
             exceptionRule.expect(CensusAnalyserException.class);
-            stateAnalyser.loadIndiaStateCode(WRONG_STATE_CODE_CSV_FILE_PATH);
+            censusAndStateCodeAnalyser.loadIndiaStateCode(WRONG_STATE_CODE_CSV_FILE_PATH);
         } catch (CensusAnalyserException e) {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.FILE_PROBLEM, e.type);
         }
@@ -110,8 +109,8 @@ public class CensusAnalyserTest {
     @Test
     public void givenIndiaStateCodeCSVFile_WithWrongType_ShouldThrowException() {
         try {
-            StateAnalyser stateAnalyser = new StateAnalyser();
-            stateAnalyser.loadIndiaStateCode(WRONG_STATE_CODE_FILE_TYPE);
+            CensusAndStateCodeAnalyser censusAndStateCodeAnalyser = new CensusAndStateCodeAnalyser();
+            censusAndStateCodeAnalyser.loadIndiaStateCode(WRONG_STATE_CODE_FILE_TYPE);
         } catch (CensusAnalyserException e) {
             System.out.println(e.getMessage());
         }
@@ -121,10 +120,10 @@ public class CensusAnalyserTest {
     @Test
     public void givenIndiaStateCodeCSVFile_WithWrongDelimiterFile_ShouldThrowException() {
         try {
-            StateAnalyser stateAnalyser = new StateAnalyser();
+            CensusAndStateCodeAnalyser censusAndStateCodeAnalyser = new CensusAndStateCodeAnalyser();
             ExpectedException expectedException = ExpectedException.none();
             expectedException.expect(CensusAnalyserException.class);
-            stateAnalyser.loadIndiaStateCode(WRONG_STATE_CODE_DELIMITER_FILE);
+            censusAndStateCodeAnalyser.loadIndiaStateCode(WRONG_STATE_CODE_DELIMITER_FILE);
         } catch (CensusAnalyserException e) {
             System.out.println(e.getMessage());
         }
@@ -134,10 +133,10 @@ public class CensusAnalyserTest {
     @Test
     public void givenIndiaStateCodeCSVFile_WithWrongHeader_ShouldThrowException() {
         try {
-            StateAnalyser stateAnalyser = new StateAnalyser();
+            CensusAndStateCodeAnalyser censusAndStateCodeAnalyser = new CensusAndStateCodeAnalyser();
             ExpectedException expectedException = ExpectedException.none();
             expectedException.expect(CensusAnalyserException.class);
-            stateAnalyser.loadIndiaStateCode(WRONG_STATE_CODE_HEADER_FILE);
+            censusAndStateCodeAnalyser.loadIndiaStateCode(WRONG_STATE_CODE_HEADER_FILE);
         } catch (CensusAnalyserException e) {
             System.out.println(e.getMessage());
         }
