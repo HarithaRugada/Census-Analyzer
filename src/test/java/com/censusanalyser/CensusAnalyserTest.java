@@ -6,13 +6,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.stream.StreamSupport;
-
 public class CensusAnalyserTest {
 
     private static final String INDIA_CENSUS_CSV_FILE_PATH = "IndiaStateCensusData.csv";
     private static final String WRONG_CSV_FILE_PATH = "IndiaStateCensusData.csv";
     private static final String WRONG_FILE_TYPE = "IndiaStateCensusData.txt";
+    private static final String WRONG_HEADER_FILE = "IndiaStateCensusDataWrongHeader.csv";
 
     //TC-1.1
     @Test
@@ -51,17 +50,26 @@ public class CensusAnalyserTest {
 
     //TC-1.4
     @Test
-    public void givenIndiaCensusData_WithWrongDelimiterFile_ShouldThrowException()
-    {
-        try
-        {
-            CensusAnalyser censusAnalyser=new CensusAnalyser();
-            ExpectedException expectedException=ExpectedException.none();
+    public void givenIndiaCensusData_WithWrongDelimiterFile_ShouldThrowException() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            ExpectedException expectedException = ExpectedException.none();
             expectedException.expect(CensusAnalyserException.class);
             censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
-        }catch (CensusAnalyserException e)
-        {
+        } catch (CensusAnalyserException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenIndiaCensusData_WithWrongHeader_ShouldThrowException() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            ExpectedException expectedException = ExpectedException.none();
+            expectedException.expect(CensusAnalyserException.class);
+            censusAnalyser.loadIndiaCensusData(WRONG_HEADER_FILE);
+        } catch (CensusAnalyserException e) {
+            System.out.println(e.getMessage());
         }
     }
 }
