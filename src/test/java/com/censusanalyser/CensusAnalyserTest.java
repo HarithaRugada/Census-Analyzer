@@ -11,6 +11,7 @@ public class CensusAnalyserTest {
     private static final String INDIA_CENSUS_CSV_FILE_PATH = "IndiaStateCensusData.csv";
     private static final String WRONG_CSV_FILE_PATH = "IndiaStateCensusData.csv";
     private static final String WRONG_FILE_TYPE = "IndiaStateCensusData.txt";
+    private static final String WRONG_DELIMITER_FILE="IndiaStateCensusDataWrongDelimiter.csv";
     private static final String WRONG_HEADER_FILE = "IndiaStateCensusDataWrongHeader.csv";
 
     //TC-1.1
@@ -55,9 +56,9 @@ public class CensusAnalyserTest {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             ExpectedException expectedException = ExpectedException.none();
             expectedException.expect(CensusAnalyserException.class);
-            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            censusAnalyser.loadIndiaCensusData(WRONG_DELIMITER_FILE);
         } catch (CensusAnalyserException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
