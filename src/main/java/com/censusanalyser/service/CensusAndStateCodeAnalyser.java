@@ -3,6 +3,7 @@ package com.censusanalyser.service;
 import com.censusanalyser.exception.CensusAndStateCodeAnalyserException;
 import com.censusanalyser.model.IndiaCensusCSV;
 import com.censusanalyser.model.IndiaStateCodeCSV;
+import com.censusanalyser.utility.CensusAndStateCodeAnalyserUtility;
 import com.google.gson.Gson;
 import csvbuilder.CSVBuilderException;
 import csvbuilder.CSVBuilderFactory;
@@ -79,22 +80,28 @@ public class CensusAndStateCodeAnalyser {
     }
 
     public String getPopulationSortedData() {
+        CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
         indiaCensusCSVList.sort(((Comparator<IndiaCensusCSV>)
                 (census1, census2) -> census2.population.compareTo(census1.population)).reversed());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", indiaCensusCSVList);
         String sortedCensusData = new Gson().toJson(indiaCensusCSVList);
         return sortedCensusData;
     }
 
     public String getDensitySortedData() {
+        CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
         indiaCensusCSVList.sort(((Comparator<IndiaCensusCSV>)
                 (census1, census2) -> census2.densityPerSqKm.compareTo(census1.densityPerSqKm)).reversed());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", indiaCensusCSVList);
         String sortedCensusData = new Gson().toJson(indiaCensusCSVList);
         return sortedCensusData;
     }
 
     public String getAreaSortedData() {
+        CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
         indiaCensusCSVList.sort(((Comparator<IndiaCensusCSV>)
                 (census1, census2) -> census2.areaInSqKm.compareTo(census1.areaInSqKm)).reversed());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", indiaCensusCSVList);
         String sortedCensusData = new Gson().toJson(indiaCensusCSVList);
         return sortedCensusData;
     }
