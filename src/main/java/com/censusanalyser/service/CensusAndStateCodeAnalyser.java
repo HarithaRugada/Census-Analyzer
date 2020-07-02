@@ -92,4 +92,10 @@ public class CensusAndStateCodeAnalyser {
         return sortedCensusData;
     }
 
+    public String getAreaSortedData() {
+        indiaCensusCSVList.sort(((Comparator<IndiaCensusCSV>)
+                (census1, census2) -> census2.areaInSqKm.compareTo(census1.areaInSqKm)).reversed());
+        String sortedCensusData = new Gson().toJson(indiaCensusCSVList);
+        return sortedCensusData;
+    }
 }
