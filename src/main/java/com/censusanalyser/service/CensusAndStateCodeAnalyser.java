@@ -1,8 +1,11 @@
 package com.censusanalyser.service;
-import csvbuilder.*;
+
 import com.censusanalyser.exception.CensusAnalyserException;
 import com.censusanalyser.model.IndiaCensusCSV;
 import com.censusanalyser.model.IndiaStateCSV;
+import csvbuilder.CSVBuilderException;
+import csvbuilder.CSVBuilderFactory;
+import csvbuilder.ICSVBuilder;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,6 +13,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.StreamSupport;
 
 public class CensusAndStateCodeAnalyser {
@@ -17,8 +21,8 @@ public class CensusAndStateCodeAnalyser {
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<IndiaCensusCSV> censusCSVIterator = icsvBuilder.getCSVFileIterator(reader, IndiaCensusCSV.class);
-            return this.getCount(censusCSVIterator);
+            List<IndiaCensusCSV> censusCSVList = icsvBuilder.getCSVFileList(reader, IndiaCensusCSV.class);
+            return censusCSVList.size();
         } catch (FileNotFoundException e) {
             throw new CensusAnalyserException(e.getMessage(), CensusAnalyserException.ExceptionType.NO_FILE);
         } catch (IllegalStateException e) {
@@ -35,8 +39,8 @@ public class CensusAndStateCodeAnalyser {
     public int loadIndiaStateCode(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<IndiaStateCSV> stateCSVIterator = icsvBuilder.getCSVFileIterator(reader, IndiaStateCSV.class);
-            return getCount(stateCSVIterator);
+            List<IndiaStateCSV> indiaStateCSVList = icsvBuilder.getCSVFileList(reader, IndiaStateCSV.class);
+            return indiaStateCSVList.size();
         } catch (FileNotFoundException e) {
             throw new CensusAnalyserException(e.getMessage(), CensusAnalyserException.ExceptionType.NO_FILE);
         } catch (IllegalStateException e) {
