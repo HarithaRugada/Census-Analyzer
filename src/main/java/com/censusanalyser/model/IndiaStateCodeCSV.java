@@ -2,26 +2,26 @@ package com.censusanalyser.model;
 
 import com.opencsv.bean.CsvBindByName;
 
-public class IndiaStateCSV {
+public class IndiaStateCodeCSV {
     @CsvBindByName(column = "SrNo", required = true)
-    public String SrNo;
+    public Integer srNo;
 
     @CsvBindByName(column = "State Name", required = true)
-    public int StateName;
+    public String stateName;
 
     @CsvBindByName(column = "TIN", required = true)
-    public int TIN;
+    public Integer tIN;
 
     @CsvBindByName(column = "StateCode", required = true)
-    public int StateCode;
+    public String stateCode;
 
     @Override
     public String toString() {
         return "IndiaStateCSV{" +
-                "State='" + SrNo + '\'' +
-                ", Population='" + StateName + '\'' +
-                ", AreaInSqKm='" + TIN + '\'' +
-                ", DensityPerSqKm='" + StateCode + '\'' +
+                "State='" + srNo + '\'' +
+                ", Population='" + stateName + '\'' +
+                ", AreaInSqKm='" + tIN + '\'' +
+                ", DensityPerSqKm='" + stateCode + '\'' +
                 '}';
     }
 }
