@@ -85,16 +85,11 @@ public class CensusAndStateCodeAnalyser {
         return sortedCensusData;
     }
 
-//    public <E> void sort(Comparator<E> comparator, List<E> list) {
-//        for (int i = 0; i < list.size() - 1; i++) {
-//            for (int j = 0; j < list.size() - i - 1; j++) {
-//                E csv1 = (E) list.get(j);
-//                E csv2 = (E) list.get(j + 1);
-//                if (comparator.compare(csv1, csv2) > 0) {
-//                    list.set(j, csv2);
-//                    list.set(j + 1, csv1);
-//                }
-//            }
-//        }
-//    }
+    public String getDensitySortedData() {
+        indiaCensusCSVList.sort(((Comparator<IndiaCensusCSV>)
+                (census1, census2) -> census2.densityPerSqKm.compareTo(census1.densityPerSqKm)).reversed());
+        String sortedCensusData = new Gson().toJson(indiaCensusCSVList);
+        return sortedCensusData;
+    }
+
 }
