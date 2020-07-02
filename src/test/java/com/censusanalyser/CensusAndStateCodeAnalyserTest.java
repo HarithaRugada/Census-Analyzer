@@ -195,4 +195,15 @@ public class CensusAndStateCodeAnalyserTest {
         }
     }
 
+    @Test
+    public void givenIndiaCensusData_WhenSortedByArea_ShouldReturnSortedResult() {
+        try {
+            censusAndStateCodeAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            String sortedCensusData = censusAndStateCodeAnalyser.getAreaSortedData();
+            IndiaCensusCSV[] indiaCensusCSVList = new Gson().fromJson(sortedCensusData, IndiaCensusCSV[].class);
+            Assert.assertEquals("10486", indiaCensusCSVList[0].areaInSqKm);
+        } catch (CensusAndStateCodeAnalyserException e) {
+            e.printStackTrace();
+        }
+    }
 }
