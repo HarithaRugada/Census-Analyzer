@@ -3,6 +3,7 @@ package com.censusanalyser.service;
 import com.censusanalyser.exception.CensusAndStateCodeAnalyserException;
 import com.censusanalyser.model.IndiaCensusCSV;
 import com.censusanalyser.model.IndiaStateCodeCSV;
+import com.censusanalyser.model.USCensusCSV;
 import com.censusanalyser.utility.CensusAndStateCodeAnalyserUtility;
 import com.google.gson.Gson;
 import csvbuilder.CSVBuilderException;
@@ -22,6 +23,7 @@ import java.util.stream.StreamSupport;
 public class CensusAndStateCodeAnalyser {
     List<IndiaCensusCSV> indiaCensusCSVList = null;
     List<IndiaStateCodeCSV> indiaStateCodeCSVList = null;
+    List<USCensusCSV> usCensusCSVList = null;
 
     public int loadIndiaCensusData(String csvFilePath) throws CensusAndStateCodeAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
@@ -46,6 +48,24 @@ public class CensusAndStateCodeAnalyser {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
             indiaStateCodeCSVList = icsvBuilder.getCSVFileList(reader, IndiaStateCodeCSV.class);
             return indiaStateCodeCSVList.size();
+        } catch (NoSuchFileException e) {
+            throw new CensusAndStateCodeAnalyserException("No Such File Exists", CensusAndStateCodeAnalyserException.ExceptionType.NO_FILE);
+        } catch (IllegalStateException e) {
+            throw new CensusAndStateCodeAnalyserException(e.getMessage(), CensusAndStateCodeAnalyserException.ExceptionType.UNABLE_TO_PARSE);
+        } catch (IOException e) {
+            throw new CensusAndStateCodeAnalyserException(e.getMessage(), CensusAndStateCodeAnalyserException.ExceptionType.FILE_PROBLEM);
+        } catch (RuntimeException e) {
+            throw new CensusAndStateCodeAnalyserException("Incorrect Delimiter or Incorrect Header", CensusAndStateCodeAnalyserException.ExceptionType.INCORRECT_DELIMITER_OR_HEADER_ISSUE);
+        } catch (CSVBuilderException e) {
+            throw new CensusAndStateCodeAnalyserException(e.getMessage(), e.type.name());
+        }
+    }
+
+    public int loadUSCensusData(String csvFilePath) throws CensusAndStateCodeAnalyserException {
+        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
+            ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
+            usCensusCSVList = icsvBuilder.getCSVFileList(reader, USCensusCSV.class);
+            return usCensusCSVList.size();
         } catch (NoSuchFileException e) {
             throw new CensusAndStateCodeAnalyserException("No Such File Exists", CensusAndStateCodeAnalyserException.ExceptionType.NO_FILE);
         } catch (IllegalStateException e) {

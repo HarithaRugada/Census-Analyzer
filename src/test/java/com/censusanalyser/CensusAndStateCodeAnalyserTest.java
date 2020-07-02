@@ -20,6 +20,7 @@ public class CensusAndStateCodeAnalyserTest {
     private static final String WRONG_STATE_CODE_FILE_TYPE = "./src/test/resources/IndiaStateCode.txt";
     private static final String WRONG_STATE_CODE_DELIMITER_FILE = "./src/test/resources/IndiaStateCodeWrongDelimiter.csv";
     private static final String WRONG_STATE_CODE_HEADER_FILE = "./src/test/resources/IndiaStateCodeWrongHeader.csv";
+    private static final String US_CENSUS_CSV_FILE_PATH="./src/test/resources/USCensusData.csv";
 
     CensusAndStateCodeAnalyser censusAndStateCodeAnalyser = new CensusAndStateCodeAnalyser();
 
@@ -204,6 +205,16 @@ public class CensusAndStateCodeAnalyserTest {
             Assert.assertEquals("10486", indiaCensusCSVList[0].areaInSqKm);
         } catch (CensusAndStateCodeAnalyserException e) {
             e.printStackTrace();
+        }
+    }
+
+    //sample test
+    @Test
+    public void givenUSCensusCSVFile_ReturnsCorrectRecords() {
+        try {
+            int numOfRecords = censusAndStateCodeAnalyser.loadUSCensusData(US_CENSUS_CSV_FILE_PATH);
+            Assert.assertEquals(51, numOfRecords);
+        } catch (CensusAndStateCodeAnalyserException e) {
         }
     }
 }
