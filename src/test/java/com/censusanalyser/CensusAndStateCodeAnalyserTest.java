@@ -181,4 +181,18 @@ public class CensusAndStateCodeAnalyserTest {
             e.printStackTrace();
         }
     }
+
+    //6
+    @Test
+    public void givenIndiaCensusData_WhenSortedByDensity_ShouldReturnSortedResult() {
+        try {
+            censusAndStateCodeAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            String sortedCensusData = censusAndStateCodeAnalyser.getDensitySortedData();
+            IndiaCensusCSV[] indiaCensusCSVList = new Gson().fromJson(sortedCensusData, IndiaCensusCSV[].class);
+            Assert.assertEquals("1029", indiaCensusCSVList[0].densityPerSqKm);
+        } catch (CensusAndStateCodeAnalyserException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
