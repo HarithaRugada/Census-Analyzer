@@ -2,6 +2,7 @@ package com.censusanalyser;
 
 import com.censusanalyser.exception.CensusAnalyserException;
 import com.censusanalyser.model.IndiaCensusCSV;
+import com.censusanalyser.model.IndiaStateCSV;
 import com.censusanalyser.service.CensusAndStateCodeAnalyser;
 import com.google.gson.Gson;
 import org.junit.Assert;
@@ -153,6 +154,20 @@ public class CensusAndStateCodeAnalyserTest {
             String sortedCensusData = censusAndStateCodeAnalyser.getStateWiseSortedCensusData();
             IndiaCensusCSV[] indiaCensusCSV = new Gson().fromJson(sortedCensusData, IndiaCensusCSV[].class);
             Assert.assertEquals("Andhra Pradesh", indiaCensusCSV[0].state);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //4
+    @Test
+    public void givenIndiaStateCodeData_WhenSorted_ShouldReturnSortedResult(){
+        try {
+            CensusAndStateCodeAnalyser censusAndStateCodeAnalyser = new CensusAndStateCodeAnalyser();
+            censusAndStateCodeAnalyser.loadIndiaCensusData(INDIA_STATE_CODE_CSV_FILE_PATH);
+            String sortedStateCodeData = censusAndStateCodeAnalyser.getStateCodeSortedData();
+            IndiaStateCSV[] indiaStateCSVList = new Gson().fromJson(sortedStateCodeData, IndiaStateCSV[].class);
+            Assert.assertEquals("AD", indiaStateCSVList[0].StateCode);
         } catch (CensusAnalyserException e) {
             e.printStackTrace();
         }
