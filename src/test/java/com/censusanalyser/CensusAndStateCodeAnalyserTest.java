@@ -3,6 +3,7 @@ package com.censusanalyser;
 import com.censusanalyser.exception.CensusAndStateCodeAnalyserException;
 import com.censusanalyser.model.IndiaCensusCSV;
 import com.censusanalyser.model.IndiaStateCodeCSV;
+import com.censusanalyser.model.USCensusCSV;
 import com.censusanalyser.service.CensusAndStateCodeAnalyser;
 import com.google.gson.Gson;
 import org.junit.Assert;
@@ -20,7 +21,7 @@ public class CensusAndStateCodeAnalyserTest {
     private static final String WRONG_STATE_CODE_FILE_TYPE = "./src/test/resources/IndiaStateCode.txt";
     private static final String WRONG_STATE_CODE_DELIMITER_FILE = "./src/test/resources/IndiaStateCodeWrongDelimiter.csv";
     private static final String WRONG_STATE_CODE_HEADER_FILE = "./src/test/resources/IndiaStateCodeWrongHeader.csv";
-    private static final String US_CENSUS_CSV_FILE_PATH="./src/test/resources/USCensusData.csv";
+    private static final String US_CENSUS_CSV_FILE_PATH = "./src/test/resources/USCensusData.csv";
 
     CensusAndStateCodeAnalyser censusAndStateCodeAnalyser = new CensusAndStateCodeAnalyser();
 
@@ -215,6 +216,18 @@ public class CensusAndStateCodeAnalyserTest {
             int numOfRecords = censusAndStateCodeAnalyser.loadUSCensusData(US_CENSUS_CSV_FILE_PATH);
             Assert.assertEquals(51, numOfRecords);
         } catch (CensusAndStateCodeAnalyserException e) {
+        }
+    }
+
+    @Test
+    public void givenUSCensusData_WhenSortedByPopulation_ShouldReturnSortedResult() {
+        try {
+            censusAndStateCodeAnalyser.loadUSCensusData(US_CENSUS_CSV_FILE_PATH);
+            String sortedCensusData = censusAndStateCodeAnalyser.getPopulationWiseSortedUSCensusData();
+            USCensusCSV[] usCensusCSVList = new Gson().fromJson(sortedCensusData, USCensusCSV[].class);
+            Assert.assertEquals("1052567", usCensusCSVList[0].population);
+        } catch (CensusAndStateCodeAnalyserException e) {
+            e.printStackTrace();
         }
     }
 }
