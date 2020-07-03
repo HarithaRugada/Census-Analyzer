@@ -152,4 +152,13 @@ public class CensusAndStateCodeAnalyser {
         String sortedUSCensusData = new Gson().toJson(usCensusCSVList);
         return sortedUSCensusData;
     }
+
+    public String getLandAreaWiseSortedUSCensusData() {
+        CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
+        usCensusCSVList.sort(((Comparator<USCensusCSV>)
+                (census1, census2) -> census2.landArea.compareTo(census1.landArea)).reversed());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/USCensusJSON.json", usCensusCSVList);
+        String sortedUSCensusData = new Gson().toJson(usCensusCSVList);
+        return sortedUSCensusData;
+    }
 }
