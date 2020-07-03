@@ -143,4 +143,13 @@ public class CensusAndStateCodeAnalyser {
         String sortedUSCensusData = new Gson().toJson(usCensusCSVList);
         return sortedUSCensusData;
     }
+
+    public String getHousingDensityWiseSortedUSCensusData() {
+        CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
+        usCensusCSVList.sort(((Comparator<USCensusCSV>)
+                (census1, census2) -> census2.housingDensity.compareTo(census1.housingDensity)).reversed());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/USCensusJSON.json", usCensusCSVList);
+        String sortedUSCensusData = new Gson().toJson(usCensusCSVList);
+        return sortedUSCensusData;
+    }
 }
