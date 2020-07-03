@@ -242,4 +242,16 @@ public class CensusAndStateCodeAnalyserTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void givenUSCensusData_WhenSortedByHousingDensity_ShouldReturnSortedResult() {
+        try {
+            censusAndStateCodeAnalyser.loadUSCensusData(US_CENSUS_CSV_FILE_PATH);
+            String sortedCensusData = censusAndStateCodeAnalyser.getPopulationDensityWiseSortedUSCensusData();
+            USCensusCSV[] usCensusCSVList = new Gson().fromJson(sortedCensusData, USCensusCSV[].class);
+            Assert.assertEquals("0.19", usCensusCSVList[0].housingDensity);
+        } catch (CensusAndStateCodeAnalyserException e) {
+            e.printStackTrace();
+        }
+    }
 }
