@@ -125,4 +125,13 @@ public class CensusAndStateCodeAnalyser {
         String sortedCensusData = new Gson().toJson(indiaCensusCSVList);
         return sortedCensusData;
     }
+
+    public String getPopulationWiseSortedUSCensusData() {
+        CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
+        usCensusCSVList.sort(((Comparator<USCensusCSV>)
+                (census1, census2) -> census2.population.compareTo(census1.population)).reversed());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/USCensusJSON.json", usCensusCSVList);
+        String sortedUSCensusData = new Gson().toJson(usCensusCSVList);
+        return sortedUSCensusData;
+    }
 }
