@@ -13,22 +13,22 @@ public class USCensusCSV {
     public String population;
 
     @CsvBindByName(column = "Housing units", required = true)
-    public int housingUnits;
+    public String housingUnits;
 
     @CsvBindByName(column = "Total area", required = true)
-    public Double totalArea;
+    public String totalArea;
 
     @CsvBindByName(column = "Water area", required = true)
-    public Double waterArea;
+    public String waterArea;
 
     @CsvBindByName(column = "Land area", required = true)
-    public Double landArea;
+    public String landArea;
 
     @CsvBindByName(column = "Population Density", required = true)
-    public Double populationDensity;
+    public String populationDensity;
 
     @CsvBindByName(column = "Housing Density", required = true)
-    public Double housingDensity;
+    public String housingDensity;
 
     @Override
     public String toString() {

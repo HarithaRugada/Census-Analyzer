@@ -9,9 +9,9 @@ import java.util.List;
 
 public class CensusAndStateCodeAnalyserUtility {
     public String createJsonFile(String filePath, List csvList) {
-        try (FileWriter fileWriter=new FileWriter(filePath)){
-            Gson gson=new GsonBuilder().create();
-            gson.toJson(csvList,fileWriter);
+        try (FileWriter fileWriter = new FileWriter(filePath)) {
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(csvList, fileWriter);
         } catch (IOException e) {
             e.printStackTrace();
         }
