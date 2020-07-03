@@ -44,10 +44,8 @@ public class CensusAndStateCodeAnalyser {
             return indiaCensusList.size();
         } catch (NoSuchFileException e) {
             throw new CensusAndStateCodeAnalyserException("No Such File Exists", CensusAndStateCodeAnalyserException.ExceptionType.NO_FILE);
-        } catch (IllegalStateException e) {
-            throw new CensusAndStateCodeAnalyserException(e.getMessage(), CensusAndStateCodeAnalyserException.ExceptionType.UNABLE_TO_PARSE);
         } catch (IOException e) {
-            throw new CensusAndStateCodeAnalyserException(e.getMessage(), CensusAndStateCodeAnalyserException.ExceptionType.FILE_PROBLEM);
+            throw new CensusAndStateCodeAnalyserException("Problem with File", CensusAndStateCodeAnalyserException.ExceptionType.FILE_PROBLEM);
         } catch (RuntimeException e) {
             throw new CensusAndStateCodeAnalyserException("Incorrect Delimiter or Incorrect Header", CensusAndStateCodeAnalyserException.ExceptionType.INCORRECT_DELIMITER_OR_HEADER_ISSUE);
         } catch (CSVBuilderException e) {
@@ -66,10 +64,8 @@ public class CensusAndStateCodeAnalyser {
             return indiaStateCodeList.size();
         } catch (NoSuchFileException e) {
             throw new CensusAndStateCodeAnalyserException("No Such File Exists", CensusAndStateCodeAnalyserException.ExceptionType.NO_FILE);
-        } catch (IllegalStateException e) {
-            throw new CensusAndStateCodeAnalyserException(e.getMessage(), CensusAndStateCodeAnalyserException.ExceptionType.UNABLE_TO_PARSE);
         } catch (IOException e) {
-            throw new CensusAndStateCodeAnalyserException(e.getMessage(), CensusAndStateCodeAnalyserException.ExceptionType.FILE_PROBLEM);
+            throw new CensusAndStateCodeAnalyserException("Problem With File", CensusAndStateCodeAnalyserException.ExceptionType.FILE_PROBLEM);
         } catch (RuntimeException e) {
             throw new CensusAndStateCodeAnalyserException("Incorrect Delimiter or Incorrect Header", CensusAndStateCodeAnalyserException.ExceptionType.INCORRECT_DELIMITER_OR_HEADER_ISSUE);
         } catch (CSVBuilderException e) {
@@ -88,10 +84,8 @@ public class CensusAndStateCodeAnalyser {
             return usCensusList.size();
         } catch (NoSuchFileException e) {
             throw new CensusAndStateCodeAnalyserException("No Such File Exists", CensusAndStateCodeAnalyserException.ExceptionType.NO_FILE);
-        } catch (IllegalStateException e) {
-            throw new CensusAndStateCodeAnalyserException(e.getMessage(), CensusAndStateCodeAnalyserException.ExceptionType.UNABLE_TO_PARSE);
         } catch (IOException e) {
-            throw new CensusAndStateCodeAnalyserException(e.getMessage(), CensusAndStateCodeAnalyserException.ExceptionType.FILE_PROBLEM);
+            throw new CensusAndStateCodeAnalyserException("Problem with File", CensusAndStateCodeAnalyserException.ExceptionType.FILE_PROBLEM);
         } catch (RuntimeException e) {
             throw new CensusAndStateCodeAnalyserException("Incorrect Delimiter or Incorrect Header", CensusAndStateCodeAnalyserException.ExceptionType.INCORRECT_DELIMITER_OR_HEADER_ISSUE);
         } catch (CSVBuilderException e) {
