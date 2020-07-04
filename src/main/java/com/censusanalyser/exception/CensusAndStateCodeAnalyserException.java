@@ -3,7 +3,7 @@ package com.censusanalyser.exception;
 public class CensusAndStateCodeAnalyserException extends Exception {
 
     public enum ExceptionType {
-        FILE_PROBLEM, UNABLE_TO_PARSE, NO_FILE, INCORRECT_DELIMITER_OR_HEADER_ISSUE
+        FILE_PROBLEM, NO_FILE, INCORRECT_DELIMITER_OR_HEADER_ISSUE, NO_CENSUS_DATA
     }
 
     public ExceptionType type;

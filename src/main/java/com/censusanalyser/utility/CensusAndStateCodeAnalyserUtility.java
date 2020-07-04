@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class CensusAndStateCodeAnalyserUtility {
+    //Creating Json File
     public String createJsonFile(String filePath, List csvList) {
         try (FileWriter fileWriter = new FileWriter(filePath)) {
             Gson gson = new GsonBuilder().create();

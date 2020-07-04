@@ -17,12 +17,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 public class CensusAndStateCodeAnalyser {
-    //List<IndiaCensusCSV> indiaCensusCSVList = null;
-    //List<IndiaStateCodeCSV> indiaStateCodeCSVList = null;
-    //List<USCensusCSV> usCensusCSVList = null;
     List<IndiaCensusDAO> indiaCensusList = null;
     List<IndiaCensusDAO> indiaStateCodeList = null;
     List<USCensusDAO> usCensusList = null;
@@ -33,10 +29,10 @@ public class CensusAndStateCodeAnalyser {
         this.usCensusList = new ArrayList<>();
     }
 
+    //Loading the India Census Data File
     public int loadIndiaCensusData(String csvFilePath) throws CensusAndStateCodeAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
-            //indiaCensusCSVList = icsvBuilder.getCSVFileList(reader, IndiaCensusCSV.class);
             Iterator<IndiaCensusCSV> csvIterator = icsvBuilder.getCSVFileIterator(reader, IndiaCensusCSV.class);
             while (csvIterator.hasNext()) {
                 this.indiaCensusList.add(new IndiaCensusDAO(csvIterator.next()));
@@ -45,7 +41,7 @@ public class CensusAndStateCodeAnalyser {
         } catch (NoSuchFileException e) {
             throw new CensusAndStateCodeAnalyserException("No Such File Exists", CensusAndStateCodeAnalyserException.ExceptionType.NO_FILE);
         } catch (IOException e) {
-            throw new CensusAndStateCodeAnalyserException("Problem with File", CensusAndStateCodeAnalyserException.ExceptionType.FILE_PROBLEM);
+            throw new CensusAndStateCodeAnalyserException(e.getMessage(), CensusAndStateCodeAnalyserException.ExceptionType.FILE_PROBLEM);
         } catch (RuntimeException e) {
             throw new CensusAndStateCodeAnalyserException("Incorrect Delimiter or Incorrect Header", CensusAndStateCodeAnalyserException.ExceptionType.INCORRECT_DELIMITER_OR_HEADER_ISSUE);
         } catch (CSVBuilderException e) {
@@ -53,6 +49,7 @@ public class CensusAndStateCodeAnalyser {
         }
     }
 
+    //Loading the India State Code File
     public int loadIndiaStateCode(String csvFilePath) throws CensusAndStateCodeAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
@@ -65,7 +62,7 @@ public class CensusAndStateCodeAnalyser {
         } catch (NoSuchFileException e) {
             throw new CensusAndStateCodeAnalyserException("No Such File Exists", CensusAndStateCodeAnalyserException.ExceptionType.NO_FILE);
         } catch (IOException e) {
-            throw new CensusAndStateCodeAnalyserException("Problem With File", CensusAndStateCodeAnalyserException.ExceptionType.FILE_PROBLEM);
+            throw new CensusAndStateCodeAnalyserException(e.getMessage(), CensusAndStateCodeAnalyserException.ExceptionType.FILE_PROBLEM);
         } catch (RuntimeException e) {
             throw new CensusAndStateCodeAnalyserException("Incorrect Delimiter or Incorrect Header", CensusAndStateCodeAnalyserException.ExceptionType.INCORRECT_DELIMITER_OR_HEADER_ISSUE);
         } catch (CSVBuilderException e) {
@@ -73,10 +70,10 @@ public class CensusAndStateCodeAnalyser {
         }
     }
 
+    //Loading the US Census Data File
     public int loadUSCensusData(String csvFilePath) throws CensusAndStateCodeAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
-            //usCensusCSVList = icsvBuilder.getCSVFileList(reader, USCensusCSV.class);
             Iterator<USCensusCSV> csvIterator = icsvBuilder.getCSVFileIterator(reader, USCensusCSV.class);
             while (csvIterator.hasNext()) {
                 this.usCensusList.add(new USCensusDAO(csvIterator.next()));
@@ -85,7 +82,7 @@ public class CensusAndStateCodeAnalyser {
         } catch (NoSuchFileException e) {
             throw new CensusAndStateCodeAnalyserException("No Such File Exists", CensusAndStateCodeAnalyserException.ExceptionType.NO_FILE);
         } catch (IOException e) {
-            throw new CensusAndStateCodeAnalyserException("Problem with File", CensusAndStateCodeAnalyserException.ExceptionType.FILE_PROBLEM);
+            throw new CensusAndStateCodeAnalyserException(e.getMessage(), CensusAndStateCodeAnalyserException.ExceptionType.FILE_PROBLEM);
         } catch (RuntimeException e) {
             throw new CensusAndStateCodeAnalyserException("Incorrect Delimiter or Incorrect Header", CensusAndStateCodeAnalyserException.ExceptionType.INCORRECT_DELIMITER_OR_HEADER_ISSUE);
         } catch (CSVBuilderException e) {
@@ -93,12 +90,7 @@ public class CensusAndStateCodeAnalyser {
         }
     }
 
-    private <E> int getCount(Iterator<E> iterator) {
-        Iterable<E> csvIterable = () -> iterator;
-        int numberOfEntries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
-        return numberOfEntries;
-    }
-
+    //Sorting the India Census Data according to State
     public String getStateWiseSortedCensusData() {
         indiaCensusList.sort(((Comparator<IndiaCensusDAO>)
                 (census1, census2) -> census2.state.compareTo(census1.state)).reversed());
@@ -106,6 +98,7 @@ public class CensusAndStateCodeAnalyser {
         return sortedCensusData;
     }
 
+    //Sorting the StateCode
     public String getStateCodeSortedData() {
         indiaStateCodeList.sort(((Comparator<IndiaCensusDAO>) (stateCode1, stateCode2) -> stateCode2
                 .stateCode.compareTo(stateCode1.stateCode)).reversed());
@@ -113,6 +106,7 @@ public class CensusAndStateCodeAnalyser {
         return sortedStateCodeData;
     }
 
+    //Sorting the population
     public String getPopulationSortedData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
         indiaCensusList.sort(((Comparator<IndiaCensusDAO>)
@@ -122,6 +116,7 @@ public class CensusAndStateCodeAnalyser {
         return sortedCensusData;
     }
 
+    //Sorting the Density
     public String getDensitySortedData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
         indiaCensusList.sort(((Comparator<IndiaCensusDAO>)
@@ -131,6 +126,7 @@ public class CensusAndStateCodeAnalyser {
         return sortedCensusData;
     }
 
+    //Sorting the Area
     public String getAreaSortedData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
         indiaCensusList.sort(((Comparator<IndiaCensusDAO>)
@@ -140,6 +136,7 @@ public class CensusAndStateCodeAnalyser {
         return sortedCensusData;
     }
 
+    //Sorting Population of USCensus Data
     public String getPopulationWiseSortedUSCensusData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
         usCensusList.sort(((Comparator<USCensusDAO>)
@@ -149,6 +146,7 @@ public class CensusAndStateCodeAnalyser {
         return sortedUSCensusData;
     }
 
+    //Sorting Population Density of USCensus Data
     public String getPopulationDensityWiseSortedUSCensusData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
         usCensusList.sort(((Comparator<USCensusDAO>)
@@ -158,6 +156,7 @@ public class CensusAndStateCodeAnalyser {
         return sortedUSCensusData;
     }
 
+    //Sorting Housing Density of USCensus Data
     public String getHousingDensityWiseSortedUSCensusData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
         usCensusList.sort(((Comparator<USCensusDAO>)
@@ -167,6 +166,7 @@ public class CensusAndStateCodeAnalyser {
         return sortedUSCensusData;
     }
 
+    //Sorting LandArea of USCensus Data
     public String getLandAreaWiseSortedUSCensusData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
         usCensusList.sort(((Comparator<USCensusDAO>)
@@ -174,5 +174,20 @@ public class CensusAndStateCodeAnalyser {
         censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/USCensusJSON.json", usCensusList);
         String sortedUSCensusData = new Gson().toJson(usCensusList);
         return sortedUSCensusData;
+    }
+
+    //Sorting the Population Density of USCensus and IndiaCensus Data
+    public String getPopulationDensityWiseSortedUSCensusDataAndIndiaCensusData() {
+        usCensusList.sort(((Comparator<USCensusDAO>)
+                (census1, census2) -> census2.populationDensity.compareTo(census1.populationDensity)).reversed());
+        String usPopulous = usCensusList.get(0).populationDensity;
+        indiaCensusList.sort(((Comparator<IndiaCensusDAO>)
+                (census1, census2) -> census2.population.compareTo(census1.population)).reversed());
+        String indiaPopulous = indiaCensusList.get(0).densityPerSqKm;
+        double d1 = Double.parseDouble(usPopulous);
+        double d2 = Double.parseDouble(indiaPopulous);
+        if (d1 > d2)
+            return usCensusList.get(0).state;
+        return indiaCensusList.get(0).state;
     }
 }

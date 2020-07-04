@@ -5,9 +5,9 @@ public class IndiaCensusDAO {
     public String population;
     public String areaInSqKm;
     public String densityPerSqKm;
-    public String srNo;
+    public String SrNo;
     public String stateName;
-    public String tIN;
+    public String TIN;
     public String stateCode;
 
     public IndiaCensusDAO(IndiaCensusCSV indiaCensusCSV) {
@@ -18,9 +18,9 @@ public class IndiaCensusDAO {
     }
 
     public IndiaCensusDAO(IndiaStateCodeCSV indiaStateCodeCSV) {
-        srNo=indiaStateCodeCSV.srNo;
+        SrNo=indiaStateCodeCSV.SrNo;
         stateName=indiaStateCodeCSV.stateName;
-        tIN=indiaStateCodeCSV.tIN;
+        TIN=indiaStateCodeCSV.TIN;
         stateCode=indiaStateCodeCSV.stateCode;
     }
 }
