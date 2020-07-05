@@ -13,20 +13,19 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class CensusAndStateCodeAnalyser {
-    List<IndiaCensusDAO> indiaCensusList = null;
-    List<IndiaCensusDAO> indiaStateCodeList = null;
-    List<USCensusDAO> usCensusList = null;
+    Map<String, IndiaCensusDAO> indiaCensusMap = null;
+    Map<String, IndiaCensusDAO> indiaStateCodeMap = null;
+    Map<String, USCensusDAO> usCensusMap = null;
 
     public CensusAndStateCodeAnalyser() {
-        this.indiaCensusList = new ArrayList<>();
-        this.indiaStateCodeList = new ArrayList<>();
-        this.usCensusList = new ArrayList<>();
+        this.indiaCensusMap = new HashMap<>();
+        this.indiaStateCodeMap = new HashMap<>();
+        this.usCensusMap = new HashMap<>();
     }
 
     //Loading the India Census Data File
@@ -34,10 +33,10 @@ public class CensusAndStateCodeAnalyser {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
             Iterator<IndiaCensusCSV> csvIterator = icsvBuilder.getCSVFileIterator(reader, IndiaCensusCSV.class);
-            while (csvIterator.hasNext()) {
-                this.indiaCensusList.add(new IndiaCensusDAO(csvIterator.next()));
-            }
-            return indiaCensusList.size();
+            Iterable<IndiaCensusCSV> CSVIterable = () -> csvIterator;
+            StreamSupport.stream(CSVIterable.spliterator(), false)
+                    .forEach(censusDAO -> indiaCensusMap.put(censusDAO.state, new IndiaCensusDAO(censusDAO)));
+            return indiaCensusMap.size();
         } catch (NoSuchFileException e) {
             throw new CensusAndStateCodeAnalyserException("No Such File Exists", CensusAndStateCodeAnalyserException.ExceptionType.NO_FILE);
         } catch (IOException e) {
@@ -53,12 +52,11 @@ public class CensusAndStateCodeAnalyser {
     public int loadIndiaStateCode(String csvFilePath) throws CensusAndStateCodeAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
-            //indiaStateCodeCSVList = icsvBuilder.getCSVFileList(reader, IndiaStateCodeCSV.class);
             Iterator<IndiaStateCodeCSV> csvIterator = icsvBuilder.getCSVFileIterator(reader, IndiaStateCodeCSV.class);
-            while (csvIterator.hasNext()) {
-                this.indiaStateCodeList.add(new IndiaCensusDAO(csvIterator.next()));
-            }
-            return indiaStateCodeList.size();
+            Iterable<IndiaStateCodeCSV> CSVIterable = () -> csvIterator;
+            StreamSupport.stream(CSVIterable.spliterator(), false)
+                    .forEach(censusDAO -> indiaStateCodeMap.put(censusDAO.stateName, new IndiaCensusDAO(censusDAO)));
+            return indiaStateCodeMap.size();
         } catch (NoSuchFileException e) {
             throw new CensusAndStateCodeAnalyserException("No Such File Exists", CensusAndStateCodeAnalyserException.ExceptionType.NO_FILE);
         } catch (IOException e) {
@@ -75,10 +73,10 @@ public class CensusAndStateCodeAnalyser {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
             Iterator<USCensusCSV> csvIterator = icsvBuilder.getCSVFileIterator(reader, USCensusCSV.class);
-            while (csvIterator.hasNext()) {
-                this.usCensusList.add(new USCensusDAO(csvIterator.next()));
-            }
-            return usCensusList.size();
+            Iterable<USCensusCSV> CSVIterable = () -> csvIterator;
+            StreamSupport.stream(CSVIterable.spliterator(), false)
+                    .forEach(censusDAO -> usCensusMap.put(censusDAO.state, new USCensusDAO(censusDAO)));
+            return usCensusMap.size();
         } catch (NoSuchFileException e) {
             throw new CensusAndStateCodeAnalyserException("No Such File Exists", CensusAndStateCodeAnalyserException.ExceptionType.NO_FILE);
         } catch (IOException e) {
@@ -92,26 +90,18 @@ public class CensusAndStateCodeAnalyser {
 
     //Sorting the India Census Data according to State
     public String getStateWiseSortedCensusData() {
-        indiaCensusList.sort(((Comparator<IndiaCensusDAO>)
-                (census1, census2) -> census2.state.compareTo(census1.state)).reversed());
+        List<IndiaCensusDAO> indiaCensusList = indiaCensusMap.values().stream().sorted(((Comparator<IndiaCensusDAO>)
+                (census1, census2) -> census2.state.compareTo(census1.state)).reversed()).collect(Collectors.toList());
         String sortedCensusData = new Gson().toJson(indiaCensusList);
         return sortedCensusData;
-    }
-
-    //Sorting the StateCode
-    public String getStateCodeSortedData() {
-        indiaStateCodeList.sort(((Comparator<IndiaCensusDAO>) (stateCode1, stateCode2) -> stateCode2
-                .stateCode.compareTo(stateCode1.stateCode)).reversed());
-        String sortedStateCodeData = new Gson().toJson(indiaStateCodeList);
-        return sortedStateCodeData;
     }
 
     //Sorting the population
     public String getPopulationSortedData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
-        indiaCensusList.sort(((Comparator<IndiaCensusDAO>)
-                (census1, census2) -> census2.population.compareTo(census1.population)).reversed());
-        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", indiaCensusList);
+        List<IndiaCensusDAO> indiaCensusList = indiaCensusMap.values().stream().sorted(((Comparator<IndiaCensusDAO>)
+                (census1, census2) -> census2.population.compareTo(census1.population)).reversed()).collect(Collectors.toList());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", indiaCensusMap);
         String sortedCensusData = new Gson().toJson(indiaCensusList);
         return sortedCensusData;
     }
@@ -119,9 +109,9 @@ public class CensusAndStateCodeAnalyser {
     //Sorting the Density
     public String getDensitySortedData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
-        indiaCensusList.sort(((Comparator<IndiaCensusDAO>)
-                (census1, census2) -> census2.densityPerSqKm.compareTo(census1.densityPerSqKm)).reversed());
-        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", indiaCensusList);
+        List<IndiaCensusDAO> indiaCensusList = indiaCensusMap.values().stream().sorted(((Comparator<IndiaCensusDAO>)
+                (census1, census2) -> census2.densityPerSqKm.compareTo(census1.densityPerSqKm)).reversed()).collect(Collectors.toList());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", indiaCensusMap);
         String sortedCensusData = new Gson().toJson(indiaCensusList);
         return sortedCensusData;
     }
@@ -129,9 +119,25 @@ public class CensusAndStateCodeAnalyser {
     //Sorting the Area
     public String getAreaSortedData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
-        indiaCensusList.sort(((Comparator<IndiaCensusDAO>)
-                (census1, census2) -> census2.areaInSqKm.compareTo(census1.areaInSqKm)).reversed());
-        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", indiaCensusList);
+        List<IndiaCensusDAO> indiaCensusList = indiaCensusMap.values().stream().sorted(((Comparator<IndiaCensusDAO>)
+                (census1, census2) -> census2.areaInSqKm.compareTo(census1.areaInSqKm)).reversed()).collect(Collectors.toList());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", indiaCensusMap);
+        String sortedCensusData = new Gson().toJson(indiaCensusList);
+        return sortedCensusData;
+    }
+
+    //Sorting the StateCode
+    public String getStateCodeSortedData() {
+        List<IndiaCensusDAO> indiaCensusList = indiaStateCodeMap.values().stream().sorted(((Comparator<IndiaCensusDAO>)
+                (census1, census2) -> census2.stateCode.compareTo(census1.stateCode)).reversed()).collect(Collectors.toList());
+        String sortedCensusData = new Gson().toJson(indiaCensusList);
+        return sortedCensusData;
+    }
+
+    //Sorting the TIN
+    public String getTINSortedData() {
+        List<IndiaCensusDAO> indiaCensusList = indiaStateCodeMap.values().stream().sorted(((Comparator<IndiaCensusDAO>)
+                (census1, census2) -> census2.TIN.compareTo(census1.TIN)).reversed()).collect(Collectors.toList());
         String sortedCensusData = new Gson().toJson(indiaCensusList);
         return sortedCensusData;
     }
@@ -139,55 +145,80 @@ public class CensusAndStateCodeAnalyser {
     //Sorting Population of USCensus Data
     public String getPopulationWiseSortedUSCensusData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
-        usCensusList.sort(((Comparator<USCensusDAO>)
-                (census1, census2) -> census2.population.compareTo(census1.population)).reversed());
-        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/USCensusJSON.json", usCensusList);
-        String sortedUSCensusData = new Gson().toJson(usCensusList);
-        return sortedUSCensusData;
+        List<USCensusDAO> indiaCensusList = usCensusMap.values().stream().sorted(((Comparator<USCensusDAO>)
+                (census1, census2) -> census2.population.compareTo(census1.population)).reversed()).collect(Collectors.toList());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", usCensusMap);
+        String sortedCensusData = new Gson().toJson(indiaCensusList);
+        return sortedCensusData;
     }
 
     //Sorting Population Density of USCensus Data
     public String getPopulationDensityWiseSortedUSCensusData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
-        usCensusList.sort(((Comparator<USCensusDAO>)
-                (census1, census2) -> census2.populationDensity.compareTo(census1.populationDensity)).reversed());
-        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/USCensusJSON.json", usCensusList);
-        String sortedUSCensusData = new Gson().toJson(usCensusList);
-        return sortedUSCensusData;
+        List<USCensusDAO> indiaCensusList = usCensusMap.values().stream().sorted(((Comparator<USCensusDAO>)
+                (census1, census2) -> census2.populationDensity.compareTo(census1.populationDensity)).reversed()).collect(Collectors.toList());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", usCensusMap);
+        String sortedCensusData = new Gson().toJson(indiaCensusList);
+        return sortedCensusData;
     }
 
     //Sorting Housing Density of USCensus Data
     public String getHousingDensityWiseSortedUSCensusData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
-        usCensusList.sort(((Comparator<USCensusDAO>)
-                (census1, census2) -> census2.housingDensity.compareTo(census1.housingDensity)).reversed());
-        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/USCensusJSON.json", usCensusList);
-        String sortedUSCensusData = new Gson().toJson(usCensusList);
-        return sortedUSCensusData;
+        List<USCensusDAO> indiaCensusList = usCensusMap.values().stream().sorted(((Comparator<USCensusDAO>)
+                (census1, census2) -> census2.housingDensity.compareTo(census1.housingDensity)).reversed()).collect(Collectors.toList());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", usCensusMap);
+        String sortedCensusData = new Gson().toJson(indiaCensusList);
+        return sortedCensusData;
     }
 
     //Sorting LandArea of USCensus Data
     public String getLandAreaWiseSortedUSCensusData() {
         CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
-        usCensusList.sort(((Comparator<USCensusDAO>)
-                (census1, census2) -> census2.landArea.compareTo(census1.landArea)).reversed());
-        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/USCensusJSON.json", usCensusList);
-        String sortedUSCensusData = new Gson().toJson(usCensusList);
-        return sortedUSCensusData;
+        List<USCensusDAO> indiaCensusList = usCensusMap.values().stream().sorted(((Comparator<USCensusDAO>)
+                (census1, census2) -> census2.landArea.compareTo(census1.landArea)).reversed()).collect(Collectors.toList());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", usCensusMap);
+        String sortedCensusData = new Gson().toJson(indiaCensusList);
+        return sortedCensusData;
     }
 
-    //Sorting the Population Density of USCensus and IndiaCensus Data
-    public String getPopulationDensityWiseSortedUSCensusDataAndIndiaCensusData() {
-        usCensusList.sort(((Comparator<USCensusDAO>)
-                (census1, census2) -> census2.populationDensity.compareTo(census1.populationDensity)).reversed());
-        String usPopulous = usCensusList.get(0).populationDensity;
-        indiaCensusList.sort(((Comparator<IndiaCensusDAO>)
-                (census1, census2) -> census2.population.compareTo(census1.population)).reversed());
-        String indiaPopulous = indiaCensusList.get(0).densityPerSqKm;
-        double d1 = Double.parseDouble(usPopulous);
-        double d2 = Double.parseDouble(indiaPopulous);
-        if (d1 > d2)
-            return usCensusList.get(0).state;
-        return indiaCensusList.get(0).state;
+    //Sorting WaterArea of USCensus Data
+    public String getWaterAreaWiseSortedUSCensusData() {
+        CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
+        List<USCensusDAO> indiaCensusList = usCensusMap.values().stream().sorted(((Comparator<USCensusDAO>)
+                (census1, census2) -> census2.waterArea.compareTo(census1.waterArea)).reversed()).collect(Collectors.toList());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", usCensusMap);
+        String sortedCensusData = new Gson().toJson(indiaCensusList);
+        return sortedCensusData;
+    }
+
+    //Sorting state of USCensus Data
+    public String getStateWiseSortedUSCensusData() {
+        CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
+        List<USCensusDAO> indiaCensusList = usCensusMap.values().stream().sorted(((Comparator<USCensusDAO>)
+                (census1, census2) -> census2.state.compareTo(census1.state)).reversed()).collect(Collectors.toList());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", usCensusMap);
+        String sortedCensusData = new Gson().toJson(indiaCensusList);
+        return sortedCensusData;
+    }
+
+    //Sorting Housing Units of USCensus Data
+    public String getHousingUnitsWiseSortedUSCensusData() {
+        CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
+        List<USCensusDAO> indiaCensusList = usCensusMap.values().stream().sorted(((Comparator<USCensusDAO>)
+                (census1, census2) -> census2.housingUnits.compareTo(census1.housingUnits)).reversed()).collect(Collectors.toList());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", usCensusMap);
+        String sortedCensusData = new Gson().toJson(indiaCensusList);
+        return sortedCensusData;
+    }
+
+    //Sorting TotalArea of USCensus Data
+    public String getTotalAreaWiseSortedUSCensusData() {
+        CensusAndStateCodeAnalyserUtility censusAndStateCodeAnalyserUtility = new CensusAndStateCodeAnalyserUtility();
+        List<USCensusDAO> indiaCensusList = usCensusMap.values().stream().sorted(((Comparator<USCensusDAO>)
+                (census1, census2) -> census2.totalArea.compareTo(census1.totalArea)).reversed()).collect(Collectors.toList());
+        censusAndStateCodeAnalyserUtility.createJsonFile("./src/test/resources/IndiaCensusJSON.json", usCensusMap);
+        String sortedCensusData = new Gson().toJson(indiaCensusList);
+        return sortedCensusData;
     }
 }

@@ -5,14 +5,14 @@ import com.google.gson.GsonBuilder;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 
 public class CensusAndStateCodeAnalyserUtility {
     //Creating Json File
-    public String createJsonFile(String filePath, List csvList) {
+    public String createJsonFile(String filePath, Map csvMap) {
         try (FileWriter fileWriter = new FileWriter(filePath)) {
             Gson gson = new GsonBuilder().create();
-            gson.toJson(csvList, fileWriter);
+            gson.toJson(csvMap, fileWriter);
         } catch (IOException e) {
             e.printStackTrace();
         }
