@@ -323,4 +323,16 @@ public class CensusAndStateCodeAnalyserTest {
             e.printStackTrace();
         }
     }
+
+    //Get maximum of Density of US and India Census Data
+    @Test
+    public void givenUSCensusDataAndIndiaCensusData_WhenSortedByDensity_ShouldReturnSortedResult() {
+        try {
+            censusAndStateCodeAnalyser.loadUSCensusData(US_CENSUS_CSV_FILE_PATH);
+            censusAndStateCodeAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            System.out.println(censusAndStateCodeAnalyser.getMaximumPopulationDensityOfUSCensusDataAndIndiaCensusData());
+        } catch (CensusAndStateCodeAnalyserException e) {
+            e.printStackTrace();
+        }
+    }
 }

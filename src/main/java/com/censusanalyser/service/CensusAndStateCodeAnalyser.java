@@ -221,4 +221,17 @@ public class CensusAndStateCodeAnalyser {
         String sortedCensusData = new Gson().toJson(indiaCensusList);
         return sortedCensusData;
     }
+
+    //Sorting Population Density of USCensus Data
+    public String getMaximumPopulationDensityOfUSCensusDataAndIndiaCensusData() {
+        List<USCensusDAO> usCensusList = usCensusMap.values().stream().sorted(((Comparator<USCensusDAO>)
+                (census1, census2) -> census2.populationDensity.compareTo(census1.populationDensity))).collect(Collectors.toList());
+        String usDensity = usCensusList.get(0).populationDensity;
+        List<IndiaCensusDAO> indiaCensusList = indiaCensusMap.values().stream().sorted(((Comparator<IndiaCensusDAO>)
+                (census1, census2) -> census2.densityPerSqKm.compareTo(census1.densityPerSqKm))).collect(Collectors.toList());
+        String indiaPopulous = indiaCensusList.get(0).densityPerSqKm;
+        double d1 = Double.parseDouble(usDensity);
+        double d2 = Double.parseDouble(indiaPopulous);
+        return d2 > d1 ? indiaCensusList.get(0).state : usCensusList.get(0).state;
+    }
 }
