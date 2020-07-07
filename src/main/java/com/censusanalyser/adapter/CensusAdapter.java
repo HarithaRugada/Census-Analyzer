@@ -19,6 +19,7 @@ import java.util.stream.StreamSupport;
 
 public abstract class CensusAdapter {
     public abstract Map<String, CensusDTO> loadCensusData(String... csvFilePath) throws CensusAndStateCodeAnalyserException;
+
     public <E> Map<String, CensusDTO> loadCensusData(Class<E> censusCSVClass, String csvFilePath) throws CensusAndStateCodeAnalyserException {
         Map<String, CensusDTO> censusMap = new HashMap<>();
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {

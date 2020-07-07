@@ -30,7 +30,7 @@ public class CensusDTO {
 //        SrNo=indiaStateCodeCSV.SrNo;
 //        stateName=indiaStateCodeCSV.stateName;
 //        TIN=indiaStateCodeCSV.TIN;
-        stateCode=indiaStateCodeCSV.stateCode;
+        stateCode = indiaStateCodeCSV.stateCode;
     }
 
     public CensusDTO(USCensusCSV usCensusCSV) {
@@ -47,7 +47,7 @@ public class CensusDTO {
         population = usCensusCSV.population;
         areaInSqKm = usCensusCSV.areaInSqKm;
         densityPerSqKm = usCensusCSV.densityPerSqKm;
-        stateCode=usCensusCSV.stateCode;
+        stateCode = usCensusCSV.stateCode;
     }
 }
 

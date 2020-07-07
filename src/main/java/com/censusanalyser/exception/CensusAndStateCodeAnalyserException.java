@@ -12,10 +12,6 @@ public class CensusAndStateCodeAnalyserException extends Exception {
         super(message);
         this.type = ExceptionType.valueOf(name);
     }
-//    public CensusAndStateCodeAnalyserException(String message, ExceptionType type, Throwable cause) {
-//        super(message, cause);
-//        this.type = type;
-//    }
 
     public CensusAndStateCodeAnalyserException(String message, ExceptionType type) {
         super(message);

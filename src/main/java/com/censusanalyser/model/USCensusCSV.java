@@ -28,20 +28,20 @@ public class USCensusCSV {
     public String densityPerSqKm;
 
     @CsvBindByName(column = "Housing Density", required = true)
-        public String UsHousingDensity;
+    public String UsHousingDensity;
 
-        @Override
-        public String toString() {
-            return "usCensusCSV{" +
-                    "State Id='" + stateCode + '\'' +
-                    ", State ='" + state + '\'' +
-                    ", Population='" + population + '\'' +
-                    ", Housing Units='" + UsHousingUnits + '\'' +
-                    ", Total Area='" + areaInSqKm + '\'' +
-                    ", Water Area='" + UsWaterArea + '\'' +
-                    ", Land Area='" + UsLandArea + '\'' +
-                    ", Population Density='" + densityPerSqKm + '\'' +
-                    ", Housing Density='" + UsHousingDensity + '\'' +
+    @Override
+    public String toString() {
+        return "usCensusCSV{" +
+                "State Id='" + stateCode + '\'' +
+                ", State ='" + state + '\'' +
+                ", Population='" + population + '\'' +
+                ", Housing Units='" + UsHousingUnits + '\'' +
+                ", Total Area='" + areaInSqKm + '\'' +
+                ", Water Area='" + UsWaterArea + '\'' +
+                ", Land Area='" + UsLandArea + '\'' +
+                ", Population Density='" + densityPerSqKm + '\'' +
+                ", Housing Density='" + UsHousingDensity + '\'' +
                 '}';
     }
 }
