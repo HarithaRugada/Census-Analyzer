@@ -4,7 +4,7 @@ import com.opencsv.bean.CsvBindByName;
 
 public class USCensusCSV {
     @CsvBindByName(column = "State Id", required = true)
-    public String stateId;
+    public String stateCode;
 
     @CsvBindByName(column = "State", required = true)
     public String state;
@@ -13,35 +13,35 @@ public class USCensusCSV {
     public String population;
 
     @CsvBindByName(column = "Housing units", required = true)
-    public String housingUnits;
+    public String UsHousingUnits;
 
     @CsvBindByName(column = "Total area", required = true)
-    public String totalArea;
+    public String areaInSqKm;
 
     @CsvBindByName(column = "Water area", required = true)
-    public String waterArea;
+    public String UsWaterArea;
 
     @CsvBindByName(column = "Land area", required = true)
-    public String landArea;
+    public String UsLandArea;
 
     @CsvBindByName(column = "Population Density", required = true)
-    public String populationDensity;
+    public String densityPerSqKm;
 
     @CsvBindByName(column = "Housing Density", required = true)
-    public String housingDensity;
+        public String UsHousingDensity;
 
-    @Override
-    public String toString() {
-        return "usCensusCSV{" +
-                "State Id='" + stateId + '\'' +
-                ", State ='" + state + '\'' +
-                ", Population='" + population + '\'' +
-                ", Housing Units='" + housingUnits + '\'' +
-                ", Total Area='" + totalArea + '\'' +
-                ", Water Area='" + waterArea + '\'' +
-                ", Land Area='" + landArea + '\'' +
-                ", Population Density='" + populationDensity + '\'' +
-                ", Housing Density='" + housingDensity + '\'' +
+        @Override
+        public String toString() {
+            return "usCensusCSV{" +
+                    "State Id='" + stateCode + '\'' +
+                    ", State ='" + state + '\'' +
+                    ", Population='" + population + '\'' +
+                    ", Housing Units='" + UsHousingUnits + '\'' +
+                    ", Total Area='" + areaInSqKm + '\'' +
+                    ", Water Area='" + UsWaterArea + '\'' +
+                    ", Land Area='" + UsLandArea + '\'' +
+                    ", Population Density='" + densityPerSqKm + '\'' +
+                    ", Housing Density='" + UsHousingDensity + '\'' +
                 '}';
     }
 }

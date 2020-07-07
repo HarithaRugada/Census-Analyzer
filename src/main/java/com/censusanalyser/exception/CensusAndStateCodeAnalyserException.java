@@ -3,7 +3,7 @@ package com.censusanalyser.exception;
 public class CensusAndStateCodeAnalyserException extends Exception {
 
     public enum ExceptionType {
-        FILE_PROBLEM, NO_FILE, INCORRECT_DELIMITER_OR_HEADER_ISSUE, NO_CENSUS_DATA
+        FILE_PROBLEM, INCORRECT_DELIMITER_OR_HEADER_ISSUE, NO_CENSUS_DATA, INVALID_COUNTRY, UNABLE_TO_PARSE
     }
 
     public ExceptionType type;
@@ -12,6 +12,10 @@ public class CensusAndStateCodeAnalyserException extends Exception {
         super(message);
         this.type = ExceptionType.valueOf(name);
     }
+//    public CensusAndStateCodeAnalyserException(String message, ExceptionType type, Throwable cause) {
+//        super(message, cause);
+//        this.type = type;
+//    }
 
     public CensusAndStateCodeAnalyserException(String message, ExceptionType type) {
         super(message);
