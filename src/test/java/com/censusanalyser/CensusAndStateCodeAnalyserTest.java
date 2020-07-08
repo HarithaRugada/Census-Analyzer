@@ -32,6 +32,7 @@ public class CensusAndStateCodeAnalyserTest {
             int numOfRecords = censusAndStateCodeAnalyser.loadCensusData(CensusAndStateCodeAnalyser.Country.INDIA, INDIA_CENSUS_CSV_FILE_PATH, INDIA_STATE_CODE_CSV_FILE_PATH);
             Assert.assertEquals(29, numOfRecords);
         } catch (CensusAndStateCodeAnalyserException e) {
+            e.printStackTrace();
         }
     }
 
@@ -79,6 +80,7 @@ public class CensusAndStateCodeAnalyserTest {
             int indiaStateCode = censusAndStateCodeAnalyser.loadCensusData(CensusAndStateCodeAnalyser.Country.INDIA, INDIA_CENSUS_CSV_FILE_PATH, INDIA_STATE_CODE_CSV_FILE_PATH);
             Assert.assertEquals(29, indiaStateCode);
         } catch (CensusAndStateCodeAnalyserException e) {
+            e.printStackTrace();
         }
     }
 
@@ -128,7 +130,6 @@ public class CensusAndStateCodeAnalyserTest {
             IndiaCensusCSV[] censusCSV = new Gson().fromJson(sortedCensusData, IndiaCensusCSV[].class);
             Assert.assertEquals("Andhra Pradesh", censusCSV[censusCSV.length - 1].state);
         } catch (CensusAndStateCodeAnalyserException e) {
-
         }
     }
 
@@ -174,6 +175,7 @@ public class CensusAndStateCodeAnalyserTest {
             int censusDataCount = censusAndStateCodeAnalyser.loadCensusData(CensusAndStateCodeAnalyser.Country.US, US_CENSUS_CSV_FILE_PATH);
             Assert.assertEquals(51, censusDataCount);
         } catch (CensusAndStateCodeAnalyserException e) {
+
         }
     }
 

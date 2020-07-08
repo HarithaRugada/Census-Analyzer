@@ -1,7 +1,7 @@
 package com.censusanalyser.adapter;
 
 import com.censusanalyser.exception.CensusAndStateCodeAnalyserException;
-import com.censusanalyser.model.CensusDTO;
+import com.censusanalyser.model.CensusDAO;
 import com.censusanalyser.model.IndiaCensusCSV;
 import com.censusanalyser.model.IndiaStateCodeCSV;
 import csvbuilder.CSVBuilderException;
@@ -17,10 +17,10 @@ import java.util.Map;
 import java.util.stream.StreamSupport;
 
 public class IndiaCensusAdapter extends CensusAdapter {
-    public Map<String, CensusDTO> censusMap;
+    public Map<String, CensusDAO> censusMap;
 
     @Override
-    public Map<String, CensusDTO> loadCensusData(String... csvFilePath) throws CensusAndStateCodeAnalyserException {
+    public Map<String, CensusDAO> loadCensusData(String... csvFilePath) throws CensusAndStateCodeAnalyserException {
         censusMap = super.loadCensusData(IndiaCensusCSV.class, csvFilePath[0]);
         this.loadIndiaStateCode(csvFilePath[1]);
         return censusMap;

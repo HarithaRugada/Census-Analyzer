@@ -2,7 +2,7 @@ package com.censusanalyser.service;
 
 import com.censusanalyser.adapter.CensusAdapterFactory;
 import com.censusanalyser.exception.CensusAndStateCodeAnalyserException;
-import com.censusanalyser.model.CensusDTO;
+import com.censusanalyser.model.CensusDAO;
 import com.censusanalyser.utility.CensusAndStateCodeAnalyserUtility;
 import com.censusanalyser.utility.SortField;
 import com.google.gson.Gson;
@@ -18,9 +18,9 @@ public class CensusAndStateCodeAnalyser {
 
     public enum Country {INDIA, US}
 
-    List<CensusDTO> censusList = null;
-    Map<String, CensusDTO> censusMap = null;
-    Map<SortField, Comparator<CensusDTO>> sortMap = null;
+    List<CensusDAO> censusList = null;
+    Map<String, CensusDAO> censusMap = null;
+    Map<SortField, Comparator<CensusDAO>> sortMap = null;
 
     public CensusAndStateCodeAnalyser() {
         this.sortMap = new HashMap<>();
@@ -61,11 +61,11 @@ public class CensusAndStateCodeAnalyser {
         return sortedStateCensusJson;
     }
 
-    private void sort(Comparator<CensusDTO> censusComparator) {
+    private void sort(Comparator<CensusDAO> censusComparator) {
         for (int i = 0; i < this.censusList.size() - 1; i++) {
             for (int j = 0; j < this.censusList.size() - i - 1; j++) {
-                CensusDTO census1 = this.censusList.get(j);
-                CensusDTO census2 = this.censusList.get(j + 1);
+                CensusDAO census1 = this.censusList.get(j);
+                CensusDAO census2 = this.censusList.get(j + 1);
                 if (censusComparator.compare(census1, census2) > 0) {
                     this.censusList.set(j, census2);
                     this.censusList.set(j + 1, census1);

@@ -1,7 +1,7 @@
 package com.censusanalyser.adapter;
 
 import com.censusanalyser.exception.CensusAndStateCodeAnalyserException;
-import com.censusanalyser.model.CensusDTO;
+import com.censusanalyser.model.CensusDAO;
 import com.censusanalyser.model.IndiaCensusCSV;
 import com.censusanalyser.model.USCensusCSV;
 import csvbuilder.CSVBuilderException;
@@ -18,10 +18,10 @@ import java.util.Map;
 import java.util.stream.StreamSupport;
 
 public abstract class CensusAdapter {
-    public abstract Map<String, CensusDTO> loadCensusData(String... csvFilePath) throws CensusAndStateCodeAnalyserException;
+    public abstract Map<String, CensusDAO> loadCensusData(String... csvFilePath) throws CensusAndStateCodeAnalyserException;
 
-    public <E> Map<String, CensusDTO> loadCensusData(Class<E> censusCSVClass, String csvFilePath) throws CensusAndStateCodeAnalyserException {
-        Map<String, CensusDTO> censusMap = new HashMap<>();
+    public <E> Map<String, CensusDAO> loadCensusData(Class<E> censusCSVClass, String csvFilePath) throws CensusAndStateCodeAnalyserException {
+        Map<String, CensusDAO> censusMap = new HashMap<>();
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
             Iterator<E> csvIterator = csvBuilder.getCSVFileIterator(reader, censusCSVClass);
@@ -29,11 +29,11 @@ public abstract class CensusAdapter {
             if (censusCSVClass.getName().equals("com.censusanalyser.model.IndiaCensusCSV")) {
                 StreamSupport.stream(csvIterable.spliterator(), false)
                         .map(IndiaCensusCSV.class::cast)
-                        .forEach(loadCensus -> censusMap.put(loadCensus.state, new CensusDTO(loadCensus)));
+                        .forEach(loadCensus -> censusMap.put(loadCensus.state, new CensusDAO(loadCensus)));
             } else if (censusCSVClass.getName().equals("com.censusanalyser.model.USCensusCSV")) {
                 StreamSupport.stream(csvIterable.spliterator(), false)
                         .map(USCensusCSV.class::cast)
-                        .forEach(loadCensus -> censusMap.put(loadCensus.state, new CensusDTO(loadCensus)));
+                        .forEach(loadCensus -> censusMap.put(loadCensus.state, new CensusDAO(loadCensus)));
             }
             return censusMap;
         } catch (IOException e) {
